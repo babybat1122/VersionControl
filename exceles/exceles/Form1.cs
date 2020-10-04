@@ -29,6 +29,7 @@ namespace exceles
         {
             InitializeComponent();
             LoadData();
+            CreateExcel();
         }
 
         private void LoadData()
@@ -88,6 +89,9 @@ namespace exceles
             foreach (var item in Flats)
             {
                 string lift = "";
+
+                xlSheet.get_Range(GetCell(2, 1), GetCell(1 + values.GetLength(0), values.GetLength(1))).Value2 = values;
+
                 if (item.Elevator == true)
                 {
                     lift = "Van";
@@ -103,12 +107,29 @@ namespace exceles
                 values[counter, 4] = lift;
                 values[counter, 5] = item.NumberOfRooms;
                 values[counter, 6] = item.FloorArea;
-                values[counter, 7] = item.Price / item.FloorArea;
-                values[counter, 8] = xlSheet.get_Range(
-                                                       GetCell(2, 1),
-                                                       GetCell(1 + values.GetLength(0), values.GetLength(1))).Value2 = values;
+                values[counter, 7] = item.Price;
+                values[counter, 8] = item.Price / item.FloorArea;
                 counter++;
             }
+
+            Excel.Range headerRange = xlSheet.get_Range(GetCell(1, 1), GetCell(1, headers.Length));
+            headerRange.Font.Bold = true;
+            headerRange.VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
+            headerRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+            headerRange.EntireColumn.AutoFit();
+            headerRange.RowHeight = 40;
+            headerRange.Interior.Color = Color.LightBlue;
+            headerRange.BorderAround2(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlThick);
+
+            int lastRowID = xlSheet.UsedRange.Rows.Count;
+            Excel.Range wholetable = xlSheet.get_Range(GetCell(2, 1), GetCell(lastRowID, headers.Length));
+            wholetable.BorderAround2(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlThick);
+            wholetable.Font.Bold = true;
+            wholetable.Interior.Color = Color.LightYellow;
+
+            Excel.Range utolso = xlSheet.get_Range(GetCell(2, headers.Length), GetCell(lastRowID, headers.Length));
+            utolso.Interior.Color = Color.LightGreen;
+            //utolso.NumberFormat = Math.Round(utolso.NumberFormat, 2);
         }
 
         private string GetCell(int x, int y)
