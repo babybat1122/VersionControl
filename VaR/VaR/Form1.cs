@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VaR.Entities;
+using Excel = Microsoft.Office.Interop.Excel;
+using System.Reflection;
 
 namespace VaR
 {
@@ -18,6 +21,30 @@ namespace VaR
 
         List<PortfolioItem> Portfolio;
 
+        private void CreatePortfolio()
+        {
+            /*Portfolio.Add(new PortfolioItem() { Index = "OTP", Volume = 10 });
+            Portfolio.Add(new PortfolioItem() { Index = "ZWACK", Volume = 10 });
+            Portfolio.Add(new PortfolioItem() { Index = "ELMU", Volume = 10 });*/
+
+            PortfolioItem p = new PortfolioItem();
+            p.Index = "OTP";
+            p.Volume = 10;
+            Portfolio.Add(p);
+
+            PortfolioItem p2 = new PortfolioItem();
+            p2.Index = "ZWACK";
+            p2.Volume = 10;
+            Portfolio.Add(p2);
+
+            PortfolioItem p3 = new PortfolioItem();
+            p3.Index = "ELMU";
+            p3.Volume = 10;
+            Portfolio.Add(p3);
+
+            dataGridView2.DataSource = Portfolio;
+        }
+
         public Form1()
         {
             InitializeComponent();
@@ -26,15 +53,25 @@ namespace VaR
             dataGridView1.DataSource = Ticks;
 
             CreatePortfolio();
-        }
 
-        private void CreatePortfolio()
-        {
-            Portfolio.Add(new PortfolioItem() { Index = "OTP", Volume = 10 });
-            Portfolio.Add(new PortfolioItem() { Index = "ZWACK", Volume = 10 });
-            Portfolio.Add(new PortfolioItem() { Index = "ELMU", Volume = 10 });
+            List<decimal> Nyereségek = new List<decimal>();
+            int intervalum = 30;
+            DateTime kezdőDátum = (from x in Ticks select x.TradingDay).Min();
+            DateTime záróDátum = new DateTime(2016, 12, 30);
+            TimeSpan z = záróDátum - kezdőDátum;
+            for (int i = 0; i < z.Days - intervalum; i++)
+            {
+                decimal ny = GetPortfolioValue(kezdőDátum.AddDays(i + intervalum))
+                           - GetPortfolioValue(kezdőDátum.AddDays(i));
+                Nyereségek.Add(ny);
+                Console.WriteLine(i + " " + ny);
+            }
 
-            dataGridView2.DataSource = Portfolio;
+            var nyereségekRendezve = (from x in Nyereségek
+                                      orderby x
+                                      select x)
+                                        .ToList();
+            MessageBox.Show(nyereségekRendezve[nyereségekRendezve.Count() / 5].ToString());
         }
 
         private decimal GetPortfolioValue(DateTime date)
@@ -50,6 +87,28 @@ namespace VaR
                 value += (decimal)last.Price * item.Volume;
             }
             return value;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.InitialDirectory = Application.StartupPath;
+            sfd.Filter = "Comma Seperated Values (*.csv)|*.csv";
+            sfd.DefaultExt = "csv";
+            sfd.AddExtension = true;
+            if (sfd.ShowDialog() != DialogResult.OK) return;
+
+            using (StreamWriter sw = new StreamWriter(sfd.FileName, false, Encoding.UTF8))
+            {
+                foreach (var p in Portfolio)
+                {
+                    sw.Write("Időszak");
+                    sw.Write(p.Index);
+                    sw.Write("Nyereség");
+                    sw.WriteLine(p.Volume);
+                    sw.WriteLine();
+                }
+            }
         }
     }
 }
