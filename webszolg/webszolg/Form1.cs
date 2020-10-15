@@ -10,11 +10,21 @@ using System.Windows.Forms;
 
 namespace webszolg
 {
+    
     public partial class Form1 : Form
     {
         public Form1()
         {
             InitializeComponent();
+
+            GetExchangeRates();
+        }
+
+        private void GetExchangeRates()
+        {
+            
+
+
         }
     }
 }
