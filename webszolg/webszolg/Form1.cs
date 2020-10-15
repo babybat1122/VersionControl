@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using webszolg.Entities;
 using webszolg.MnbServiceReference;
 
 namespace webszolg
@@ -19,6 +20,9 @@ namespace webszolg
             InitializeComponent();
 
             GetExchangeRates();
+
+            BindingList<RateData> Rates;
+            dataGridView1.DataSource = Rates;
         }
 
         private void GetExchangeRates()
