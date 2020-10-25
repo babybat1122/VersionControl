@@ -28,7 +28,10 @@ namespace week07
             Population = GetPopulation(@"C:\Temp\nép.csv");
             BirthProbabilities = GetBirthProbabilities(@"C:\Temp\születés.csv");
             DeathProbabilities = GetDeathProbabilities(@"C:\Temp\halál.csv");
+        }
 
+        public void Simulation()
+        {
             for (int year = 2005; year <= 2024; year++)
             {
                 // Végigmegyünk az összes személyen
@@ -46,10 +49,13 @@ namespace week07
                 Console.WriteLine(
                     string.Format("Év:{0} Fiúk:{1} Lányok:{2}", year, nbrOfMales, nbrOfFemales));
 
-                
-            }
+                /*List<int> MalePop;
+                MalePop.Add(nbrOfMales);
 
-            
+                List<int> FemPop;
+                FemPop.Add(nbrOfFemales);*/
+
+            }
         }
 
         public List<Person> GetPopulation(string csvpath)
@@ -117,6 +123,8 @@ namespace week07
 
         public void SimStep(int year, Person person)
         {
+            richTextBox1.Text = "";
+
             //Ha halott akkor kihagyjuk, ugrunk a ciklus következő lépésére
             if (!person.IsAlive) return;
 
@@ -147,8 +155,27 @@ namespace week07
                     újszülött.NbrOfChildren = 0;
                     újszülött.Gender = (Gender)(rng.Next(1, 3));
                     Population.Add(újszülött);
+
+                    if ()
+                    {
+
+                    }
                 }
             }
+
+            List<Person> MalePop;
+            List<Person> FemPop;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Simulation();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            textBox1.Text = ofd.InitialDirectory;
         }
     }
 }
