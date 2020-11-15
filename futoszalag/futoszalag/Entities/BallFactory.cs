@@ -13,9 +13,5 @@ namespace futoszalag.Entities
             return new Ball();
         }
 
-        public BallFactory()
-        {
-           
-        }
     }
 }

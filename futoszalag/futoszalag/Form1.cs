@@ -13,6 +13,15 @@ namespace futoszalag
 {
     public partial class Form1 : Form
     {
+        private List<Ball> _balls = new List<Ball>();
+
+        private BallFactory _factory;
+        public BallFactory Factory
+        {
+            get { return _factory; }
+            set { _factory = value; }
+        }
+
         public Form1()
         {
             InitializeComponent();
@@ -27,15 +36,6 @@ namespace futoszalag
 
             createTimer.Start();
             conveyorTimer.Start(); */
-        }
-
-        private List<Ball> _balls = new List<Ball>();
-
-        private BallFactory _factory;
-        public BallFactory Factory
-        {
-            get { return _factory; }
-            set { _factory = value; }
         }
 
         private void createTimer_Tick(object sender, EventArgs e)
