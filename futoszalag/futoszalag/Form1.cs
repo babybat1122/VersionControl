@@ -102,6 +102,11 @@ namespace futoszalag
             if (colorPicker.ShowDialog() != DialogResult.OK)
                 return;
             button.BackColor = colorPicker.Color;
+
+            Factory = new BallFactory
+            {
+                BallColor = button1.BackColor
+            };
         }
     }
 }

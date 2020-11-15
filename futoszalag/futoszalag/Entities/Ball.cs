@@ -12,6 +12,7 @@ namespace futoszalag.Entities
 {
     public class Ball : Toy
     {
+
         public SolidBrush BallColor { get; private set; }
 
         public Ball(Color color)

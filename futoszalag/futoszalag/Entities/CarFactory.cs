@@ -11,7 +11,7 @@ namespace futoszalag.Entities
     {
         public Toy CreateNew()
         {
-            return new Ball();
+            return new Car();
         }
     }
 }
