@@ -65,9 +65,11 @@ namespace week10
                 winnerBrain = winners.FirstOrDefault().Brain.Clone();
                 gc.GameOver -= Gc_GameOver;
                 return;
+
+                button1.Visible = true;
             }
 
-            /*gc.ResetCurrentLevel();
+            gc.ResetCurrentLevel();
             
             foreach (var p in topPerformers)
             {
@@ -83,7 +85,16 @@ namespace week10
                     gc.AddPlayer(b.Mutate());
             }
             
-            gc.Start();*/
+            gc.Start();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            gc.ResetCurrentLevel();
+            gc.AddPlayer(winnerBrain.Clone());
+            gc.AddPlayer();
+            ga.Focus();
+            gc.Start(true);
         }
     }
 }
